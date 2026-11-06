@@ -12,8 +12,8 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $dataPelanggan = Pelanggan::all(); 
-    
+        $dataPelanggan = Pelanggan::all();
+
     // Kirim variabel $dataPelanggan ke view
         return view('admin.pelanggan.index', compact('dataPelanggan'));
     }
@@ -49,9 +49,9 @@ class PelangganController extends Controller
     public function show(string $id)
     {
         $dataPelanggan = Pelanggan::find($id);
-        
+
         if (!$dataPelanggan) {
-            return "Data tidak ditemukan"; // Atau return abort(404);
+            return "Data tidak ditemukan";
         }
 
         return "Data ditemukan: " . $dataPelanggan->first_name;
