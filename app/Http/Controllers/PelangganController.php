@@ -40,7 +40,7 @@ class PelangganController extends Controller
 
         Pelanggan::create($data);
 
-        dd("Data Berhasil Disimpan ke Database!", $data);
+        return redirect()->route('pelanggan.index')->with('success', 'Data pelanggan berhasil ditambahkan.');
     }
 
     /**
