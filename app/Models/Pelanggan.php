@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Pelanggan extends Model
 {
-    protected $primaryKey = 'pelanggan_id'; 
+    protected $primaryKey = 'pelanggan_id';
     protected $table = 'pelanggan';
-    protected $fillable     = [
+    protected $fillable = [
         'first_name',
         'last_name',
         'birthday',
@@ -16,4 +17,31 @@ class Pelanggan extends Model
         'email',
         'phone',
     ];
+
+    /**
+     * Scope untuk filter data berdasarkan kolom yang dikirim via request.
+     */
+    public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
+    {
+        foreach ($filterableColumns as $column) {
+            if ($request->filled($column)) {
+                $query->where($column, $request->input($column));
+            }
+        }
+        return $query;
+    }
+
+    /**
+     * Scope untuk search data berdasarkan keyword pada kolom tertentu.
+     */
+    public function scopeSearch($query, $request, array $columns)
+    {
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request, $columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $request->search . '%');
+                }
+            });
+        }
+    }
 }
